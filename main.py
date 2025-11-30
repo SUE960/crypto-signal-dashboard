@@ -344,6 +344,139 @@ def render_top_navigation():
     """, unsafe_allow_html=True)
 
 
+def calculate_correlations_with_price(df):
+    """코인 가격과의 상관관계 계산"""
+    correlations = {}
+    
+    if df.empty or 'ETH_close' not in df.columns:
+        return correlations
+    
+    # 트위터 인플루언서
+    if 'twitter_count' in df.columns:
+        correlations['트위터 게시글 수'] = df['twitter_count'].corr(df['ETH_close'])
+    if 'twitter_sentiment_compound' in df.columns:
+        correlations['트위터 감정 분석'] = df['twitter_sentiment_compound'].corr(df['ETH_close'])
+    
+    # 텔레그램
+    if 'message_count' in df.columns:
+        correlations['텔레그램 게시글 수'] = df['message_count'].corr(df['ETH_close'])
+    if 'avg_sentiment' in df.columns:
+        correlations['텔레그램 감정 분석'] = df['avg_sentiment'].corr(df['ETH_close'])
+    
+    # 코인니스 (데이터 수집 중)
+    correlations['코인니스 게시글 수'] = None  # 데이터 수집 중
+    correlations['코인니스 감정 분석'] = None  # 데이터 수집 중
+    
+    return correlations
+
+
+def calculate_correlations_with_whale(df):
+    """고래 지갑과의 상관관계 계산"""
+    correlations = {}
+    
+    if df.empty or 'tx_frequency' not in df.columns:
+        return correlations
+    
+    # 트위터 인플루언서
+    if 'twitter_count' in df.columns:
+        correlations['트위터 게시글 수'] = df['twitter_count'].corr(df['tx_frequency'])
+    if 'twitter_sentiment_compound' in df.columns:
+        correlations['트위터 감정 분석'] = df['twitter_sentiment_compound'].corr(df['tx_frequency'])
+    
+    # 텔레그램
+    if 'message_count' in df.columns:
+        correlations['텔레그램 게시글 수'] = df['message_count'].corr(df['tx_frequency'])
+    if 'avg_sentiment' in df.columns:
+        correlations['텔레그램 감정 분석'] = df['avg_sentiment'].corr(df['tx_frequency'])
+    
+    # 코인니스 (데이터 수집 중)
+    correlations['코인니스 게시글 수'] = None  # 데이터 수집 중
+    correlations['코인니스 감정 분석'] = None  # 데이터 수집 중
+    
+    return correlations
+
+
+def render_correlation_indicators(correlations, target_name):
+    """상관관계 지표 표시 (Upbit 스타일)"""
+    st.markdown(f"""
+    <div style="padding: 16px; background: #f9fafb; border-radius: 8px; margin-bottom: 16px;">
+        <div style="font-size: 13px; color: #6b7280; margin-bottom: 8px;">
+            각 지표와 <strong>{target_name}</strong>의 상관관계 (Pearson Correlation)
+        </div>
+        <div style="font-size: 12px; color: #9ca3af;">
+            -1.0 ~ 1.0 범위: 1.0에 가까울수록 강한 양의 상관관계, -1.0에 가까울수록 강한 음의 상관관계
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown('<div class="indicator-list">', unsafe_allow_html=True)
+    
+    for name, value in correlations.items():
+        if value is None:
+            # 데이터 수집 중
+            st.markdown(f"""
+            <div class="indicator-item">
+                <div>
+                    <div class="indicator-name">{name}</div>
+                </div>
+                <div>
+                    <div class="indicator-value neutral" style="font-size: 13px;">
+                        데이터 수집 중
+                    </div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            # 상관계수 값 표시
+            if abs(value) >= 0.7:
+                strength = "강한 상관관계"
+                color_class = "positive" if value > 0 else "negative"
+            elif abs(value) >= 0.4:
+                strength = "중간 상관관계"
+                color_class = "neutral"
+            else:
+                strength = "약한 상관관계"
+                color_class = "neutral"
+            
+            st.markdown(f"""
+            <div class="indicator-item">
+                <div>
+                    <div class="indicator-name">{name}</div>
+                </div>
+                <div>
+                    <div class="indicator-value {color_class}">{value:.4f}</div>
+                    <div class="indicator-change neutral">{strength}</div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+    
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+def render_recent_news(df_news):
+    """최근 뉴스 표시"""
+    st.markdown("""
+    <div style="padding: 24px; background: #f9fafb; border-radius: 8px; text-align: center;">
+        <div style="font-size: 18px; font-weight: 600; color: #374151; margin-bottom: 12px;">
+            📰 코인니스 뉴스
+        </div>
+        <div style="font-size: 14px; color: #6b7280; margin-bottom: 24px;">
+            실시간 암호화폐 뉴스를 수집 중입니다
+        </div>
+        <div style="padding: 48px; background: #ffffff; border: 2px dashed #e5e7eb; border-radius: 8px;">
+            <div style="font-size: 48px; margin-bottom: 16px;">⏳</div>
+            <div style="font-size: 15px; color: #9ca3af;">
+                데이터 수집 진행 중...
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    if not df_news.empty:
+        st.markdown("### 최근 수집된 뉴스")
+        st.dataframe(df_news.head(10), use_container_width=True)
+
+
 def render_spike_table(df):
     """스파이크 알람 시계열 표"""
     st.markdown("## 🔔 Spike Alerts")
@@ -453,6 +586,52 @@ def main():
         'twitter': twitter_score,
         'composite': composite_score
     }
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # 탭 추가 - Upbit 스타일
+    st.markdown("""
+    <style>
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 0px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        background-color: #ffffff;
+        border-radius: 0px;
+        color: #6b7280;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 0 24px;
+        border-bottom: 2px solid transparent;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background-color: #ffffff;
+        color: #3b82f6;
+        border-bottom: 2px solid #3b82f6;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+    
+    tab1, tab2, tab3 = st.tabs(["코인가격 관계보기", "고래지갑 관계보기", "지금 뉴스보기"])
+    
+    with tab1:
+        # 코인가격과의 상관관계 계산
+        correlations_price = calculate_correlations_with_price(df_scored)
+        render_correlation_indicators(correlations_price, "코인 가격")
+    
+    with tab2:
+        # 고래지갑과의 상관관계 계산
+        correlations_whale = calculate_correlations_with_whale(df_scored)
+        render_correlation_indicators(correlations_whale, "고래 거래")
+    
+    with tab3:
+        # 최근 뉴스 표시
+        render_recent_news(data.get('coinness', pd.DataFrame()))
     
     st.markdown("<br>", unsafe_allow_html=True)
     

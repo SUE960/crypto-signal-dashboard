@@ -589,52 +589,6 @@ def main():
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # 탭 추가 - Upbit 스타일
-    st.markdown("""
-    <style>
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 0px;
-        background-color: #ffffff;
-        border-bottom: 1px solid #e5e7eb;
-    }
-    
-    .stTabs [data-baseweb="tab"] {
-        height: 50px;
-        background-color: #ffffff;
-        border-radius: 0px;
-        color: #6b7280;
-        font-weight: 600;
-        font-size: 14px;
-        padding: 0 24px;
-        border-bottom: 2px solid transparent;
-    }
-    
-    .stTabs [aria-selected="true"] {
-        background-color: #ffffff;
-        color: #3b82f6;
-        border-bottom: 2px solid #3b82f6;
-    }
-    </style>
-    """, unsafe_allow_html=True)
-    
-    tab1, tab2, tab3 = st.tabs(["코인가격 관계보기", "고래지갑 관계보기", "지금 뉴스보기"])
-    
-    with tab1:
-        # 코인가격과의 상관관계 계산
-        correlations_price = calculate_correlations_with_price(df_scored)
-        render_correlation_indicators(correlations_price, "코인 가격")
-    
-    with tab2:
-        # 고래지갑과의 상관관계 계산
-        correlations_whale = calculate_correlations_with_whale(df_scored)
-        render_correlation_indicators(correlations_whale, "고래 거래")
-    
-    with tab3:
-        # 최근 뉴스 표시
-        render_recent_news(data.get('coinness', pd.DataFrame()))
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    
     # 종합 점수 - Upbit 가격 스타일
     change_class = "positive" if score_change > 0 else "negative" if score_change < 0 else "neutral"
     change_symbol = "▲" if score_change > 0 else "▼" if score_change < 0 else "−"
@@ -655,7 +609,7 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # Upbit 스타일 레이아웃: 차트(왼쪽) + 지표(오른쪽)
+    # Upbit 스타일 레이아웃: 차트(왼쪽) + 탭+지표(오른쪽)
     col_chart, col_indicators = st.columns([7, 3])
     
     with col_chart:
@@ -703,75 +657,49 @@ def main():
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col_indicators:
-        # 지표 리스트 (종합 점수 카드 제거)
-        st.markdown('<div class="indicator-list">', unsafe_allow_html=True)
-        st.markdown('<div class="indicator-header">📊 시장 지표</div>', unsafe_allow_html=True)
+        # 탭 추가 - 오른쪽 지표 영역
+        st.markdown("""
+        <style>
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 0px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+        }
         
-        # 지표 데이터 준비
-        indicators = [
-            {
-                'name': '텔레그램 신호',
-                'value': scores['telegram'],
-                'change': 0,
-                'trend': 'neutral'
-            },
-            {
-                'name': '뉴스 신호',
-                'value': scores['news'],
-                'change': 0,
-                'trend': 'neutral'
-            },
-            {
-                'name': '트위터 신호',
-                'value': scores['twitter'],
-                'change': 0,
-                'trend': 'neutral'
-            },
-        ]
+        .stTabs [data-baseweb="tab"] {
+            height: 40px;
+            background-color: #ffffff;
+            border-radius: 0px;
+            color: #6b7280;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 0 12px;
+            border-bottom: 2px solid transparent;
+        }
         
-        # ETH/BTC 가격 추가
-        if not df_scored.empty:
-            if 'ETH_close' in df_scored.columns:
-                eth_price = df_scored['ETH_close'].iloc[-1]
-                eth_change = df_scored['ETH_price_change_pct'].iloc[-1] if 'ETH_price_change_pct' in df_scored.columns else 0
-                indicators.append({
-                    'name': 'ETH 가격',
-                    'value': eth_price,
-                    'change': eth_change,
-                    'trend': 'positive' if eth_change > 0 else 'negative' if eth_change < 0 else 'neutral',
-                    'is_price': True
-                })
-            
-            if 'BTC_close' in df_scored.columns:
-                btc_price = df_scored['BTC_close'].iloc[-1]
-                btc_change = df_scored['BTC_price_change_pct'].iloc[-1] if 'BTC_price_change_pct' in df_scored.columns else 0
-                indicators.append({
-                    'name': 'BTC 가격',
-                    'value': btc_price,
-                    'change': btc_change,
-                    'trend': 'positive' if btc_change > 0 else 'negative' if btc_change < 0 else 'neutral',
-                    'is_price': True
-                })
+        .stTabs [aria-selected="true"] {
+            background-color: #ffffff;
+            color: #3b82f6;
+            border-bottom: 2px solid #3b82f6;
+        }
+        </style>
+        """, unsafe_allow_html=True)
         
-        # 지표 표시
-        for ind in indicators:
-            is_price = ind.get('is_price', False)
-            value_format = f"${ind['value']:,.0f}" if is_price else f"{ind['value']:.1f}"
-            change_symbol = "▲" if ind['change'] > 0 else "▼" if ind['change'] < 0 else "−"
-            
-            st.markdown(f"""
-            <div class="indicator-item">
-                <div>
-                    <div class="indicator-name">{ind['name']}</div>
-                </div>
-                <div>
-                    <div class="indicator-value">{value_format}</div>
-                    <div class="indicator-change {ind['trend']}">{change_symbol} {abs(ind['change']):.2f}%</div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
+        tab1, tab2, tab3 = st.tabs(["코인가격 관계", "고래지갑 관계", "지금 뉴스"])
         
-        st.markdown('</div>', unsafe_allow_html=True)
+        with tab1:
+            # 코인가격과의 상관관계 계산
+            correlations_price = calculate_correlations_with_price(df_scored)
+            render_correlation_indicators(correlations_price, "코인 가격")
+        
+        with tab2:
+            # 고래지갑과의 상관관계 계산
+            correlations_whale = calculate_correlations_with_whale(df_scored)
+            render_correlation_indicators(correlations_whale, "고래 거래")
+        
+        with tab3:
+            # 최근 뉴스 표시
+            render_recent_news(data.get('coinness', pd.DataFrame()))
     
     st.markdown("<br>", unsafe_allow_html=True)
     

@@ -69,77 +69,150 @@ st.markdown("""
         background-clip: text;
     }
     
-    /* 신호 박스 카드 */
+    /* 신호 박스 카드 - 작고 컴팩트 */
     .signal-box {
-        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-        border: 1px solid #333;
-        border-radius: 16px;
-        padding: 24px;
-        margin: 16px 0;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-        transition: all 0.3s ease;
+        background: rgba(50, 50, 50, 0.3);
+        border: 1px solid rgba(100, 100, 100, 0.3);
+        border-radius: 8px;
+        padding: 12px 8px;
+        margin: 4px 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s ease;
+        backdrop-filter: blur(10px);
     }
     
     .signal-box:hover {
-        transform: translateY(-4px);
-        border-color: #00d4ff;
-        box-shadow: 0 12px 48px rgba(0, 212, 255, 0.2);
+        transform: translateY(-2px);
+        border-color: rgba(0, 212, 255, 0.5);
+        box-shadow: 0 4px 16px rgba(0, 212, 255, 0.15);
     }
     
     .signal-title {
-        font-size: 18px;
+        font-size: 11px;
         font-weight: 600;
         color: #00d4ff;
-        margin-bottom: 16px;
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-align: center;
+    }
+    
+    .signal-arrow {
+        font-size: 20px;
+        text-align: center;
+        margin: 4px 0;
+        color: #7b2ff7;
+        line-height: 1;
+    }
+    
+    .signal-value {
+        font-size: 18px;
+        font-weight: 700;
+        text-align: center;
+        color: #00d4ff;
+        line-height: 1.2;
+    }
+    
+    .signal-label {
+        font-size: 9px;
+        text-align: center;
+        color: #888;
+        text-transform: uppercase;
+        margin-top: 2px;
+    }
+    
+    /* 종합 점수 카드 - 상단 강조 */
+    .score-card {
+        background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        border-radius: 12px;
+        padding: 20px 40px;
+        text-align: center;
+        margin: 16px 0 24px 0;
+        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        border: 2px solid rgba(59, 130, 246, 0.5);
+    }
+    
+    .score-value {
+        font-size: 48px;
+        font-weight: 900;
+        color: #ffffff;
+        line-height: 1;
+        margin: 8px 0;
+    }
+    
+    .score-label {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.8);
         text-transform: uppercase;
         letter-spacing: 1px;
     }
     
-    .signal-arrow {
-        font-size: 48px;
-        text-align: center;
-        margin: 16px 0;
-        color: #7b2ff7;
-    }
-    
-    .signal-value {
-        font-size: 32px;
-        font-weight: 700;
-        text-align: center;
-        color: #00d4ff;
-    }
-    
-    .signal-label {
-        font-size: 14px;
-        text-align: center;
-        color: #888;
-        text-transform: uppercase;
-    }
-    
-    /* 종합 점수 카드 */
-    .score-card {
-        background: linear-gradient(135deg, #7b2ff7 0%, #00d4ff 100%);
-        border-radius: 20px;
-        padding: 32px;
-        text-align: center;
-        margin: 24px 0;
-        box-shadow: 0 12px 48px rgba(123, 47, 247, 0.3);
-    }
-    
-    .score-value {
-        font-size: 64px;
-        font-weight: 900;
-        color: #ffffff;
-        line-height: 1;
-        margin: 16px 0;
-    }
-    
-    .score-label {
+    .score-change {
         font-size: 18px;
+        font-weight: 600;
+        margin-top: 8px;
+    }
+    
+    /* 차트 컨테이너 */
+    .chart-container {
+        background: #0a0a0a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+    
+    /* 지표 리스트 - Upbit 스타일 */
+    .indicator-list {
+        background: #0a0a0a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 12px;
+        max-height: 600px;
+        overflow-y: auto;
+    }
+    
+    .indicator-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 8px;
+        border-bottom: 1px solid #1a1a1a;
+        transition: background 0.2s;
+    }
+    
+    .indicator-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .indicator-name {
+        font-size: 13px;
         color: #ffffff;
-        opacity: 0.9;
-        text-transform: uppercase;
-        letter-spacing: 2px;
+        font-weight: 500;
+    }
+    
+    .indicator-value {
+        font-size: 16px;
+        font-weight: 700;
+        text-align: right;
+    }
+    
+    .indicator-change {
+        font-size: 12px;
+        text-align: right;
+        margin-top: 2px;
+    }
+    
+    .positive {
+        color: #ef4444;
+    }
+    
+    .negative {
+        color: #3b82f6;
+    }
+    
+    .neutral {
+        color: #888;
     }
     
     /* 탭 스타일 */
@@ -234,14 +307,20 @@ def load_all_data():
     return df_main, data
 
 
-def create_signal_box_html(source_name, score, arrow="→", color="#00d4ff"):
-    """신호 박스 HTML 생성"""
+def create_signal_box_html(source_name, score, arrow="", color="#00d4ff"):
+    """신호 박스 HTML 생성 - 컴팩트 버전"""
+    # 점수가 0이면 화살표만 표시
+    if score == 0:
+        return f"""
+        <div style="text-align: center; padding: 12px 0; color: {color}; font-size: 24px;">
+            {source_name}
+        </div>
+        """
+    
     return f"""
     <div class="signal-box">
         <div class="signal-title">{source_name}</div>
         <div class="signal-value">{score:.1f}</div>
-        <div class="signal-label">Signal Strength</div>
-        <div class="signal-arrow" style="color: {color};">{arrow}</div>
     </div>
     """
 
@@ -259,8 +338,7 @@ def render_top_navigation():
 
 
 def render_signal_boxes(df_main, data):
-    """3가지 신호 박스 렌더링"""
-    st.markdown("## 📡 Market Signals")
+    """신호 박스 렌더링 - Upbit 스타일"""
     
     if df_main.empty:
         st.warning("데이터가 없습니다. data/processed_data.csv 파일을 확인해주세요.")
@@ -290,54 +368,44 @@ def render_signal_boxes(df_main, data):
         news_score = df_scored['news_score'].iloc[-1]
         twitter_score = df_scored['twitter_score'].iloc[-1]
         composite_score = df_scored['composite_score'].iloc[-1]
+        
+        # 24시간 전 점수
+        if len(df_scored) > 24:
+            composite_score_24h = df_scored['composite_score'].iloc[-25]
+            score_change = composite_score - composite_score_24h
+            score_change_pct = (score_change / composite_score_24h) * 100 if composite_score_24h != 0 else 0
+        else:
+            score_change = 0
+            score_change_pct = 0
     else:
         telegram_score = news_score = twitter_score = composite_score = 50
+        score_change = 0
+        score_change_pct = 0
     
-    # 종합 점수 카드 (상단)
+    # 신호 레벨 결정
     signal_summary = calculator.get_signal_summary(df_scored)
+    
+    # 종합 점수 카드 (최상단 강조)
+    change_class = "positive" if score_change > 0 else "negative" if score_change < 0 else "neutral"
+    change_symbol = "▲" if score_change > 0 else "▼" if score_change < 0 else "−"
     
     st.markdown(f"""
     <div class="score-card">
-        <div class="score-label">Composite Market Signal</div>
-        <div class="score-value">{composite_score:.0f}</div>
-        <div style="font-size: 16px; margin-top: 12px;">
-            {signal_summary['current_level'].replace('_', ' ').upper()} | 
-            Trend: {signal_summary['trend'].upper()}
+        <div class="score-label">COMPOSITE MARKET SIGNAL</div>
+        <div class="score-value">{composite_score:.1f}</div>
+        <div class="score-change {change_class}">
+            {change_symbol} {abs(score_change):.1f} ({abs(score_change_pct):.2f}%) | 
+            {signal_summary['current_level'].replace('_', ' ').upper()}
         </div>
     </div>
     """, unsafe_allow_html=True)
     
-    # 3개 신호 박스
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("### 텔레그램 → 고래 거래 → 가격")
-        st.markdown(create_signal_box_html("TELEGRAM", telegram_score, "→", "#00d4ff"), 
-                   unsafe_allow_html=True)
-        st.markdown(create_signal_box_html("WHALE TX", 65, "→", "#7b2ff7"), 
-                   unsafe_allow_html=True)
-        st.markdown(create_signal_box_html("PRICE", 58, "📈", "#00ff87"), 
-                   unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("### 뉴스 → 고래 거래 → 가격")
-        st.markdown(create_signal_box_html("NEWS", news_score, "→", "#00d4ff"), 
-                   unsafe_allow_html=True)
-        st.markdown(create_signal_box_html("WHALE TX", 62, "→", "#7b2ff7"), 
-                   unsafe_allow_html=True)
-        st.markdown(create_signal_box_html("PRICE", 61, "📈", "#00ff87"), 
-                   unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown("### 트위터 → 고래 거래 → 가격")
-        st.markdown(create_signal_box_html("TWITTER", twitter_score, "→", "#00d4ff"), 
-                   unsafe_allow_html=True)
-        st.markdown(create_signal_box_html("WHALE TX", 70, "→", "#7b2ff7"), 
-                   unsafe_allow_html=True)
-        st.markdown(create_signal_box_html("PRICE", 68, "📈", "#00ff87"), 
-                   unsafe_allow_html=True)
-    
-    return df_scored
+    return df_scored, {
+        'telegram': telegram_score,
+        'news': news_score,
+        'twitter': twitter_score,
+        'composite': composite_score
+    }
 
 
 def render_spike_table(df):
@@ -398,7 +466,7 @@ def render_cta_button():
 
 
 def main():
-    """메인 함수"""
+    """메인 함수 - Upbit 스타일 레이아웃"""
     # 상단 네비게이션
     render_top_navigation()
     
@@ -410,18 +478,19 @@ def main():
         st.error("데이터를 로드할 수 없습니다. 먼저 python scripts/preprocess_data.py를 실행하세요.")
         return
     
-    # 신호 박스
-    df_scored = render_signal_boxes(df_main, data)
+    # 신호 박스 (종합 점수 카드)
+    df_scored, scores = render_signal_boxes(df_main, data)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # 탭 UI
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 종합", "💬 텔레그램", "📰 뉴스", "🐦 트위터"])
+    # Upbit 스타일 레이아웃: 차트(왼쪽) + 지표(오른쪽)
+    col_chart, col_indicators = st.columns([7, 3])
     
-    with tab1:
-        st.markdown("### 종합 시계열 분석")
+    with col_chart:
+        st.markdown('<div class="chart-container">', unsafe_allow_html=True)
+        st.markdown("### 📈 종합 점수 추이")
         
-        if not df_scored.empty:
+        if not df_scored.empty and 'composite_score' in df_scored.columns:
             # 종합 점수 차트
             fig = go.Figure()
             
@@ -429,22 +498,111 @@ def main():
                 x=df_scored['timestamp'],
                 y=df_scored['composite_score'],
                 name='Composite Score',
-                line=dict(color='#00d4ff', width=3),
+                line=dict(color='#3b82f6', width=2.5),
                 fill='tozeroy',
-                fillcolor='rgba(0, 212, 255, 0.1)'
+                fillcolor='rgba(59, 130, 246, 0.1)'
             ))
             
             fig.update_layout(
                 template='plotly_dark',
                 paper_bgcolor='#0a0a0a',
-                plot_bgcolor='#1a1a1a',
-                height=400,
-                margin=dict(l=0, r=0, t=0, b=0)
+                plot_bgcolor='#0a0a0a',
+                height=500,
+                margin=dict(l=20, r=20, t=20, b=20),
+                xaxis=dict(
+                    showgrid=True,
+                    gridcolor='#1a1a1a',
+                    title='시간'
+                ),
+                yaxis=dict(
+                    showgrid=True,
+                    gridcolor='#1a1a1a',
+                    title='점수',
+                    range=[0, 100]
+                ),
+                hovermode='x unified'
             )
             
             st.plotly_chart(fig, use_container_width=True)
         
-        # 스파이크 알람
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    with col_indicators:
+        st.markdown('<div class="indicator-list">', unsafe_allow_html=True)
+        st.markdown("### 📊 시장 지표")
+        
+        # 지표 데이터 준비
+        indicators = [
+            {
+                'name': '텔레그램 신호',
+                'value': scores['telegram'],
+                'change': 0,  # 실제로는 24h 변화율 계산
+                'trend': 'neutral'
+            },
+            {
+                'name': '뉴스 신호',
+                'value': scores['news'],
+                'change': 0,
+                'trend': 'neutral'
+            },
+            {
+                'name': '트위터 신호',
+                'value': scores['twitter'],
+                'change': 0,
+                'trend': 'neutral'
+            },
+        ]
+        
+        # ETH/BTC 가격 추가
+        if not df_scored.empty:
+            if 'ETH_close' in df_scored.columns:
+                eth_price = df_scored['ETH_close'].iloc[-1]
+                eth_change = df_scored['ETH_price_change_pct'].iloc[-1] if 'ETH_price_change_pct' in df_scored.columns else 0
+                indicators.append({
+                    'name': 'ETH 가격',
+                    'value': eth_price,
+                    'change': eth_change,
+                    'trend': 'positive' if eth_change > 0 else 'negative' if eth_change < 0 else 'neutral',
+                    'is_price': True
+                })
+            
+            if 'BTC_close' in df_scored.columns:
+                btc_price = df_scored['BTC_close'].iloc[-1]
+                btc_change = df_scored['BTC_price_change_pct'].iloc[-1] if 'BTC_price_change_pct' in df_scored.columns else 0
+                indicators.append({
+                    'name': 'BTC 가격',
+                    'value': btc_price,
+                    'change': btc_change,
+                    'trend': 'positive' if btc_change > 0 else 'negative' if btc_change < 0 else 'neutral',
+                    'is_price': True
+                })
+        
+        # 지표 표시
+        for ind in indicators:
+            is_price = ind.get('is_price', False)
+            value_format = f"${ind['value']:,.0f}" if is_price else f"{ind['value']:.1f}"
+            change_symbol = "▲" if ind['change'] > 0 else "▼" if ind['change'] < 0 else "−"
+            
+            st.markdown(f"""
+            <div class="indicator-item">
+                <div>
+                    <div class="indicator-name">{ind['name']}</div>
+                </div>
+                <div>
+                    <div class="indicator-value {ind['trend']}">{value_format}</div>
+                    <div class="indicator-change {ind['trend']}">{change_symbol} {abs(ind['change']):.2f}%</div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
+    
+    # 탭 UI
+    tab1, tab2, tab3, tab4 = st.tabs(["📊 종합", "💬 텔레그램", "📰 뉴스", "🐦 트위터"])
+    
+    with tab1:
         render_spike_table(df_scored)
     
     with tab2:
@@ -453,7 +611,7 @@ def main():
     
     with tab3:
         st.markdown("### 뉴스 분석")
-        st.info("코인니스 뉴스 감성 분석 (수집 중...)")
+        st.info("코인니스 뉴스 감성 분석")
     
     with tab4:
         st.markdown("### 트위터 분석")

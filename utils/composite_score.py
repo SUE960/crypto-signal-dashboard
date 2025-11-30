@@ -165,10 +165,16 @@ class CompositeScoreCalculator:
         """
         df_result = df.copy()
         
+        # None을 빈 DataFrame으로 변환
+        if df_news is None or (isinstance(df_news, pd.DataFrame) and df_news.empty):
+            df_news = pd.DataFrame()
+        if df_twitter is None or (isinstance(df_twitter, pd.DataFrame) and df_twitter.empty):
+            df_twitter = pd.DataFrame()
+        
         # 각 소스별 점수 계산
         telegram_score = self.calculate_telegram_score(df_result)
-        news_score = self.calculate_news_score(df_news or pd.DataFrame(), df_result)
-        twitter_score = self.calculate_twitter_score(df_twitter or pd.DataFrame(), df_result)
+        news_score = self.calculate_news_score(df_news, df_result)
+        twitter_score = self.calculate_twitter_score(df_twitter, df_result)
         
         # 종합 점수 (가중 평균)
         composite_score = (

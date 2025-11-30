@@ -63,24 +63,23 @@ st.markdown("""
         padding-right: 3rem;
     }
     
-    /* 상단 네비게이션 */
+    /* 상단 네비게이션 - 파란색 타이틀 바 */
     .top-nav {
-        background: #ffffff;
-        padding: 1.5rem 3rem;
+        background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+        padding: 0.8rem 3rem;
         margin: -2rem -3rem 2rem -3rem;
-        border-bottom: 1px solid #e5e7eb;
+        border-bottom: none;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
     
     .logo {
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 700;
-        background: linear-gradient(135deg, #3b82f6 0%, #1e3a8a 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #ffffff;
+        letter-spacing: 0.5px;
     }
     
     /* 종합 점수 - Upbit 가격 스타일 */
@@ -350,8 +349,8 @@ def render_top_navigation():
     """상단 네비게이션 렌더링"""
     st.markdown("""
     <div class="top-nav">
-        <div class="logo">🚀 CRYPTO SIGNAL DASHBOARD</div>
-        <div style="color: #888; font-size: 14px;">
+        <div class="logo">CRYPTO SIGNAL DASHBOARD</div>
+        <div style="color: rgba(255, 255, 255, 0.8); font-size: 13px; font-weight: 500;">
             Real-time Market Intelligence
         </div>
     </div>

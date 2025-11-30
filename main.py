@@ -58,7 +58,7 @@ st.markdown("""
     /* 메인 컨텐츠 너비 */
     .main .block-container {
         max-width: 100%;
-        padding-top: 2rem;
+        padding-top: 0rem;
         padding-left: 3rem;
         padding-right: 3rem;
     }
@@ -67,7 +67,7 @@ st.markdown("""
     .top-nav {
         background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
         padding: 0.8rem 3rem;
-        margin: -2rem -3rem 2rem -3rem;
+        margin: 0 -3rem 2rem -3rem;
         border-bottom: none;
         display: flex;
         justify-content: space-between;

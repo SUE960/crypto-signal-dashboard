@@ -41,6 +41,20 @@ st.markdown("""
         display: none;
     }
     
+    /* 검색창 제거 */
+    [data-testid="stHeader"] {
+        display: none;
+    }
+    
+    /* Streamlit 기본 메뉴 제거 */
+    #MainMenu {
+        display: none;
+    }
+    
+    footer {
+        display: none;
+    }
+    
     /* 메인 컨텐츠 너비 */
     .main .block-container {
         max-width: 100%;

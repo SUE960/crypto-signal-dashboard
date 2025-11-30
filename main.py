@@ -30,28 +30,35 @@ st.set_page_config(
 # 모던 블랙 테마 CSS
 st.markdown("""
 <style>
-    /* 전역 스타일 - 흰색 배경 */
+    /* Streamlit 기본 여백 강제 제거 */
     .stApp {
         background-color: #ffffff;
         color: #000000;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     
-    /* Streamlit 기본 여백 완전 제거 */
+    /* 메인 영역 여백 완전 제거 */
     .main {
-        padding-top: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
     
-    /* 사이드바 완전 제거 */
+    .main .block-container {
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    /* Streamlit 기본 요소 제거 */
     [data-testid="stSidebar"] {
         display: none;
     }
     
-    /* 검색창 제거 */
     [data-testid="stHeader"] {
         display: none;
     }
     
-    /* Streamlit 기본 메뉴 제거 */
     #MainMenu {
         display: none;
     }
@@ -60,21 +67,19 @@ st.markdown("""
         display: none;
     }
     
-    /* 메인 컨텐츠 여백 제거 */
-    .main .block-container {
-        max-width: 100%;
-        padding-top: 0 !important;
-        padding-left: 0;
-        padding-right: 0;
-        margin-top: 0 !important;
+    [data-testid="stDecoration"] {
+        display: none;
     }
     
-    /* 상단 네비게이션 - 파란색 타이틀 바 */
+    /* 상단 네비게이션 - 가로 100% */
     .top-nav {
         background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-        padding: 1rem 3rem;
-        margin: 0;
-        border-bottom: none;
+        padding: 1rem 2rem;
+        margin: 0 !important;
+        width: 100vw;
+        position: relative;
+        left: 0;
+        right: 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -82,10 +87,16 @@ st.markdown("""
     }
     
     .logo {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 700;
         color: #ffffff;
         letter-spacing: 0.5px;
+    }
+    
+    /* 가격 헤더 */
+    .price-header {
+        padding: 1.5rem 2rem;
+        margin: 0;
     }
     
     /* 종합 점수 - Upbit 가격 스타일 */
@@ -614,7 +625,7 @@ def main():
     change_symbol = "▲" if score_change > 0 else "▼" if score_change < 0 else "−"
     
     st.markdown(f"""
-    <div class="price-header" style="padding: 0 3rem;">
+    <div class="price-header">
         <div>
             <div class="price-label">크립토 시그널 지수</div>
             <div style="display: flex; align-items: baseline; gap: 12px; margin-top: 8px;">
@@ -630,6 +641,7 @@ def main():
     """, unsafe_allow_html=True)
     
     # Upbit 스타일 레이아웃: 차트(왼쪽) + 탭+지표(오른쪽)
+    st.markdown('<div style="padding: 0 2rem;">', unsafe_allow_html=True)
     col_chart, col_indicators = st.columns([7, 3])
     
     with col_chart:
@@ -721,6 +733,7 @@ def main():
             # 최근 뉴스 표시
             render_recent_news(data.get('coinness', pd.DataFrame()))
     
+    st.markdown('</div>', unsafe_allow_html=True)
     st.markdown("<br>", unsafe_allow_html=True)
     
     # 탭 UI

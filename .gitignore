@@ -1,9 +1,57 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Environment variables
 .env
+
+# Logs
 *.log
-.ipynb_checkpoints/
-data/*.csv
-!data/processed_data.csv
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Large data files (but keep processed_data.csv)
+data/*.zip
+data/telegram_data.csv
+data/coinness_data.csv
+data/coinpan_data.csv
+
+# Temp files
+*.tmp
+temp/
+tmp/

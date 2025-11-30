@@ -219,11 +219,13 @@ def load_all_data():
     """모든 데이터 로드 (5분 캐시)"""
     loader = DataLoader()
     
-    # 전처리된 데이터 로드
+    # 전처리된 데이터 로드 (상대 경로)
     try:
-        df_main = pd.read_csv('/Volumes/T7/class/2025-FALL/big_data/data/processed_data.csv')
+        data_path = os.path.join(os.path.dirname(__file__), 'data', 'processed_data.csv')
+        df_main = pd.read_csv(data_path)
         df_main['timestamp'] = pd.to_datetime(df_main['timestamp'])
-    except:
+    except Exception as e:
+        st.error(f"데이터 로드 실패: {e}")
         df_main = pd.DataFrame()
     
     # 개별 소스 데이터
@@ -260,13 +262,27 @@ def render_signal_boxes(df_main, data):
     """3가지 신호 박스 렌더링"""
     st.markdown("## 📡 Market Signals")
     
+    if df_main.empty:
+        st.warning("데이터가 없습니다. data/processed_data.csv 파일을 확인해주세요.")
+        return df_main
+    
     # 종합 점수 계산
     calculator = CompositeScoreCalculator()
-    df_scored = calculator.calculate_composite_score(
-        df_main, 
-        data['coinness'], 
-        data['twitter']
-    )
+    try:
+        df_scored = calculator.calculate_composite_score(
+            df_main, 
+            df_news=data.get('coinness', pd.DataFrame()), 
+            df_twitter=data.get('twitter', pd.DataFrame())
+        )
+    except Exception as e:
+        st.error(f"종합 점수 계산 실패: {e}")
+        import traceback
+        st.code(traceback.format_exc())
+        df_scored = df_main.copy()
+        df_scored['composite_score'] = 50
+        df_scored['telegram_score'] = 50
+        df_scored['news_score'] = 50
+        df_scored['twitter_score'] = 50
     
     # 최근 점수
     if not df_scored.empty:
@@ -328,30 +344,37 @@ def render_spike_table(df):
     """스파이크 알람 시계열 표"""
     st.markdown("## 🔔 Spike Alerts")
     
-    # 스파이크 감지
-    detector = SpikeDetector(df)
+    if df.empty:
+        st.warning("데이터가 없습니다.")
+        return
     
-    # 최근 스파이크만
-    recent_spikes = []
-    
-    if 'message_count' in df.columns:
-        msg_spikes = detector.detect_zscore_spike('message_count', threshold=2.0)
-        if not msg_spikes.empty:
-            recent_spikes.append(msg_spikes.tail(10))
-    
-    if recent_spikes:
-        spike_df = pd.concat(recent_spikes).sort_values('timestamp', ascending=False)
+    try:
+        # 스파이크 감지
+        detector = SpikeDetector(df)
         
-        for _, row in spike_df.head(5).iterrows():
-            st.markdown(f"""
-            <div class="spike-alert">
-                <strong>⚡ SPIKE DETECTED</strong> | 
-                {row['timestamp'].strftime('%Y-%m-%d %H:%M')} | 
-                {row['spike_column']}: {row['spike_magnitude']:.2f}σ
-            </div>
-            """, unsafe_allow_html=True)
-    else:
-        st.info("No recent spikes detected")
+        # 최근 스파이크만
+        recent_spikes = []
+        
+        if 'message_count' in df.columns:
+            msg_spikes = detector.detect_zscore_spike('message_count', threshold=2.0)
+            if not msg_spikes.empty:
+                recent_spikes.append(msg_spikes.tail(10))
+        
+        if recent_spikes:
+            spike_df = pd.concat(recent_spikes).sort_values('timestamp', ascending=False)
+            
+            for _, row in spike_df.head(5).iterrows():
+                st.markdown(f"""
+                <div class="spike-alert">
+                    <strong>⚡ SPIKE DETECTED</strong> | 
+                    {row['timestamp'].strftime('%Y-%m-%d %H:%M')} | 
+                    {row['spike_column']}: {row['spike_magnitude']:.2f}σ
+                </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.info("No recent spikes detected")
+    except Exception as e:
+        st.error(f"스파이크 감지 오류: {e}")
 
 
 def render_cta_button():
@@ -442,4 +465,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

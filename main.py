@@ -271,25 +271,35 @@ st.markdown("""
         color: #6b7280;
     }
     
-    /* 탭 스타일 */
+    /* 탭 스타일 - 업비트 스타일 (흰색 배경, 파란색 텍스트) */
     .stTabs [data-baseweb="tab-list"] {
-        background-color: #1a1a1a;
-        border-radius: 12px;
-        padding: 8px;
-        gap: 8px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #e5e7eb;
+        padding: 0;
+        gap: 0;
     }
     
     .stTabs [data-baseweb="tab"] {
-        background-color: transparent;
-        border-radius: 8px;
-        color: #888;
-        font-weight: 600;
-        padding: 12px 24px;
+        background-color: #ffffff;
+        border: none;
+        border-bottom: 2px solid transparent;
+        color: #9ca3af;
+        font-weight: 400;
+        font-size: 14px;
+        padding: 14px 20px;
+        transition: all 0.2s ease;
+    }
+    
+    .stTabs [data-baseweb="tab"]:hover {
+        background-color: #ffffff;
+        color: #374151;
     }
     
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #7b2ff7 0%, #00d4ff 100%);
-        color: #ffffff;
+        background-color: #ffffff !important;
+        color: #1e3a8a !important;
+        border-bottom: 2px solid #1e3a8a !important;
+        font-weight: 600;
     }
     
     /* CTA 버튼 */
@@ -734,28 +744,6 @@ def main():
             render_recent_news(data.get('coinness', pd.DataFrame()))
     
     st.markdown('</div>', unsafe_allow_html=True)
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    # 탭 UI
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 종합", "💬 텔레그램", "📰 뉴스", "🐦 트위터"])
-    
-    with tab1:
-        render_spike_table(df_scored)
-    
-    with tab2:
-        st.markdown("### 텔레그램 분석")
-        st.info("텔레그램 커뮤니티 활동 상세 분석")
-    
-    with tab3:
-        st.markdown("### 뉴스 분석")
-        st.info("코인니스 뉴스 감성 분석")
-    
-    with tab4:
-        st.markdown("### 트위터 분석")
-        st.info("인플루언서 트윗 분석")
-    
-    # CTA 버튼
-    render_cta_button()
 
 
 if __name__ == '__main__':

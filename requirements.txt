@@ -1,0 +1,34 @@
+# 데이터 수집
+telethon
+python-dotenv
+beautifulsoup4
+selenium
+webdriver-manager
+requests
+
+# 데이터 처리
+pandas>=2.0.0
+numpy>=1.24.0
+
+# 분석
+scipy
+statsmodels
+scikit-learn
+
+# 감정 분석
+vaderSentiment
+transformers
+torch
+
+# 시각화
+plotly
+seaborn
+matplotlib
+
+# 대시보드
+streamlit
+
+# 유틸리티
+python-dateutil
+pytz
+

@@ -32,6 +32,12 @@ env/
 *~
 .DS_Store
 
+# macOS metadata files
+._*
+.DS_Store
+.AppleDouble
+.LSOverride
+
 # Jupyter Notebook
 .ipynb_checkpoints
 *.ipynb

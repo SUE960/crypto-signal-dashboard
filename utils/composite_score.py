@@ -26,9 +26,15 @@ class CompositeScoreCalculator:
     
     def normalize_score(self, value, min_val, max_val):
         """0-1 사이로 정규화"""
+        # Series 처리
+        if isinstance(max_val, pd.Series):
+            result = (value - min_val) / (max_val - min_val + 1e-10)  # 0으로 나누기 방지
+            return result.fillna(0.5).clip(0, 1)
+        
+        # 스칼라 처리
         if max_val == min_val:
             return 0.5
-        return (value - min_val) / (max_val - min_val)
+        return np.clip((value - min_val) / (max_val - min_val), 0, 1)
     
     def calculate_telegram_score(self, df, window_hours=24):
         """
@@ -215,7 +221,22 @@ class CompositeScoreCalculator:
         recent_df = df.tail(recent_hours)
         
         current_score = df['composite_score'].iloc[-1]
-        current_level = df['signal_level'].iloc[-1]
+        
+        # signal_level이 없으면 계산
+        if 'signal_level' not in df.columns:
+            if current_score >= 75:
+                current_level = 'strong_bullish'
+            elif current_score >= 60:
+                current_level = 'bullish'
+            elif current_score >= 40:
+                current_level = 'neutral'
+            elif current_score >= 25:
+                current_level = 'bearish'
+            else:
+                current_level = 'strong_bearish'
+        else:
+            current_level = df['signal_level'].iloc[-1]
+        
         avg_24h = recent_df['composite_score'].mean()
         
         # 트렌드 계산 (최근 24시간)
@@ -231,14 +252,19 @@ class CompositeScoreCalculator:
         else:
             trend = 'neutral'
         
+        # 기여도 계산 (안전하게)
+        telegram_contrib = df['telegram_score'].iloc[-1] * self.weights['telegram'] if 'telegram_score' in df.columns else 0
+        news_contrib = df['news_score'].iloc[-1] * self.weights['news'] if 'news_score' in df.columns else 0
+        twitter_contrib = df['twitter_score'].iloc[-1] * self.weights['twitter'] if 'twitter_score' in df.columns else 0
+        
         return {
             'current_score': current_score,
             'current_level': current_level,
             'trend': trend,
             'avg_24h': avg_24h,
-            'telegram_contribution': df['telegram_score'].iloc[-1] * self.weights['telegram'],
-            'news_contribution': df['news_score'].iloc[-1] * self.weights['news'],
-            'twitter_contribution': df['twitter_score'].iloc[-1] * self.weights['twitter']
+            'telegram_contribution': telegram_contrib,
+            'news_contribution': news_contrib,
+            'twitter_contribution': twitter_contrib
         }
 
 

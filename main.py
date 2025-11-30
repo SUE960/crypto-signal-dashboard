@@ -36,6 +36,11 @@ st.markdown("""
         color: #000000;
     }
     
+    /* Streamlit 기본 여백 완전 제거 */
+    .main {
+        padding-top: 0 !important;
+    }
+    
     /* 사이드바 완전 제거 */
     [data-testid="stSidebar"] {
         display: none;
@@ -55,19 +60,20 @@ st.markdown("""
         display: none;
     }
     
-    /* 메인 컨텐츠 너비 */
+    /* 메인 컨텐츠 여백 제거 */
     .main .block-container {
         max-width: 100%;
-        padding-top: 0rem;
-        padding-left: 3rem;
-        padding-right: 3rem;
+        padding-top: 0 !important;
+        padding-left: 0;
+        padding-right: 0;
+        margin-top: 0 !important;
     }
     
     /* 상단 네비게이션 - 파란색 타이틀 바 */
     .top-nav {
         background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
-        padding: 0.8rem 3rem;
-        margin: 0 -3rem 2rem -3rem;
+        padding: 1rem 3rem;
+        margin: 0;
         border-bottom: none;
         display: flex;
         justify-content: space-between;
@@ -181,7 +187,7 @@ st.markdown("""
         border: 1px solid #e5e7eb;
         border-radius: 8px;
         padding: 16px;
-        margin-bottom: 16px;
+        margin: 16px 16px 16px 0;
     }
     
     /* 지표 리스트 - Upbit 흰색 스타일 */
@@ -191,6 +197,7 @@ st.markdown("""
         padding: 0;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         border: 1px solid #e5e7eb;
+        margin: 16px 0;
     }
     
     .indicator-header {
@@ -607,7 +614,7 @@ def main():
     change_symbol = "▲" if score_change > 0 else "▼" if score_change < 0 else "−"
     
     st.markdown(f"""
-    <div class="price-header">
+    <div class="price-header" style="padding: 0 3rem;">
         <div>
             <div class="price-label">크립토 시그널 지수</div>
             <div style="display: flex; align-items: baseline; gap: 12px; margin-top: 8px;">
